@@ -1,21 +1,21 @@
-name: CI
+name: Deploy to Droplet
 
-# 1
-# Controls when the workflow will run
 on:
   push:
     branches: [ master ]
 
-        
-deploy:
+jobs:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to Digital Ocean droplet via SSH action
+      - name: Deploy to Digital Ocean droplet via SSH
         uses: appleboy/ssh-action@v0.1.3
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSHKEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
-          script: 
-            $(echo "Hello Wrld")
+          script: |
+            echo "Pulling and running Ubuntu container"
+            docker pull ubuntu:latest
+            docker run -d --name ci-ubuntu ubuntu:latest sleep infinity
